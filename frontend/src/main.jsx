@@ -12,7 +12,7 @@ import App from './App.jsx'
 
 // Create an upload link for file uploads
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'https://sync-jqrt.onrender.com/graphql',
   headers: {
     'Apollo-Require-Preflight': 'true'
   }
@@ -20,7 +20,7 @@ const uploadLink = createUploadLink({
 
 // Create a WebSocket link
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:4000/graphql',
+  url: 'ws://sync-jqrt.onrender.com/graphql',
 }))
 
 // Set up the authentication link
