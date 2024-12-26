@@ -161,7 +161,7 @@ const ChatRoomList = () => {
           <DialogTrigger asChild>
             <Button variant="default">Join via Link</Button>
           </DialogTrigger>
-          <DialogContent>
+           <DialogContent className="bg-black">
             <DialogHeader>
               <DialogTitle>Join Chat Room</DialogTitle>
               <DialogDescription>
