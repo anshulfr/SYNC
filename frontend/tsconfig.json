@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "esnext", // Specify ECMAScript target version
+      "module": "esnext", // Specify module code generation
+      "baseUrl": "src", // Set the base URL to your source directory
+      "paths": {
+        "@/*": ["*"], // This allows you to use '@' as an alias for the 'src' directory
+        "@shadcn/*": ["../node_modules/@shadcn/*"] // This allows you to import ShadCN components
+      },
+      "strict": true, // Enable all strict type-checking options
+      "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+      "skipLibCheck": true // Skip type checking of declaration files
+    },
+    "include": ["src/**/*"], // Specify the files to include
+    "exclude": ["node_modules"] // Specify the files to exclude
+  }
