@@ -133,7 +133,7 @@ const ChatRoomList = () => {
           <DialogTrigger asChild>
             <Button variant="default">Create Room</Button>
           </DialogTrigger>
-          <DialogContent>
+           <DialogContent className="bg-black">
             <DialogHeader>
               <DialogTitle>Create New Chat Room</DialogTitle>
               <DialogDescription>
