@@ -20,7 +20,7 @@ const uploadLink = createUploadLink({
 
 // Create a WebSocket link
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://sync-jqrt.onrender.com/graphql',
+  url: 'wss://sync-jqrt.onrender.com/graphql',
 }))
 
 // Set up the authentication link
