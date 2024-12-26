@@ -5,13 +5,9 @@ import ChatRoom from '../models/ChatRoom.js';
 import Message from '../models/Message.js';
 import User from '../models/User.js';
 import { pubsub } from './subscriptions.js';
-import { storage } from '../config/firebase.js';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { finished } from 'stream/promises';
-
 
 const mutationResolvers = {
-  sendMessage: async (_, { chatRoomId, content, senderId, file }) => {
+  sendMessage: async (_, { chatRoomId, content, senderId }) => { // Remove file parameter
     try {
       const sender = await User.findById(senderId);
       const chatRoom = await ChatRoom.findById(chatRoomId);
@@ -20,54 +16,12 @@ const mutationResolvers = {
         throw new Error('Invalid sender or chat room');
       }
   
-      let fileData = null;
-      if (file) {
-        try {
-          // Get file details
-          const { createReadStream, filename, mimetype } = await file;
-          const stream = createReadStream();
-          
-          // Convert stream to buffer
-          const chunks = [];
-          for await (const chunk of stream) {
-            chunks.push(chunk);
-          }
-          const buffer = Buffer.concat(chunks);
-          
-          // Create unique filename
-          const timestamp = Date.now();
-          const uniqueFilename = `${timestamp}-${filename}`;
-          
-          // Create Firebase storage reference
-          const storageRef = ref(storage, `files/${chatRoomId}/${uniqueFilename}`);
-          
-          // Upload to Firebase Storage
-          await uploadBytes(storageRef, buffer, {
-            contentType: mimetype
-          });
-  
-          // Get download URL
-          const downloadURL = await getDownloadURL(storageRef);
-  
-          fileData = {
-            url: downloadURL,
-            filename: filename,
-            contentType: mimetype,
-            size: buffer.length,
-            isImage: mimetype.startsWith('image/')
-          };
-        } catch (error) {
-          console.error('File upload error:', error);
-          throw new Error('Error uploading file');
-        }
-      }
-  
       const message = await Message.create({
-        content: content || " ",
+        content,
         sender: senderId,
         chatRoom: chatRoomId,
-        sentAt: new Date().toISOString(),
-        file: fileData
+        sentAt: new Date().toISOString()
+        // Remove fileData field
       });
   
       await chatRoom.messages.push(message._id);

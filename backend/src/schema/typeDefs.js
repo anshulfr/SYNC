@@ -1,7 +1,6 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
-  scalar Upload
   scalar Date
 
   type User {
@@ -10,14 +9,6 @@ const typeDefs = gql`
     email: String!
     profilePicture: String
     createdAt: Date!
-  }
-
-  type File {
-    url: String!
-    filename: String!
-    contentType: String!
-    size: Int!
-    isImage: Boolean!
   }
 
   type ReadReceipt {
@@ -31,7 +22,6 @@ const typeDefs = gql`
     sender: User!
     chatRoom: ChatRoom!
     sentAt: Date!
-    file: File
     readBy: [ReadReceipt!]!
   }
 
@@ -51,7 +41,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    sendMessage(chatRoomId: ID!, content: String!, senderId: ID!, file: Upload): Message!
+    sendMessage(chatRoomId: ID!, content: String!, senderId: ID!): Message!
     createChatRoom(name: String!, ownerId: ID!): ChatRoom!
     joinChatRoom(chatRoomId: ID!, userId: ID!): ChatRoom!
     joinChatRoomByLink(joinLink: String!, userId: ID!): ChatRoom!

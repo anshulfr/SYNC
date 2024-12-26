@@ -7,7 +7,6 @@ import { ApolloServer } from 'apollo-server-express';
 import { execute, subscribe } from 'graphql';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import { graphqlUploadExpress } from 'graphql-upload-minimal';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import schema from './schema/schema.js';
@@ -20,12 +19,6 @@ const app = express();
 // Enable CORS
 app.use(cors());
 
-// Add middleware for handling file uploads before Apollo Server middleware
-app.use(graphqlUploadExpress({
-  maxFileSize: 10000000, // 10 MB
-  maxFiles: 10
-}));
-
 // Apollo Server Setup
 const apolloServer = new ApolloServer({
   schema,
@@ -33,7 +26,6 @@ const apolloServer = new ApolloServer({
     const token = req.headers.authorization || '';
     return { req, token };
   },
-  uploads: false // Disable built-in upload handling
 });
 
 await apolloServer.start();

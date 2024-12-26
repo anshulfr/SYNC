@@ -1,22 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ApolloClient, InMemoryCache, ApolloProvider, split } from '@apollo/client'
+import { ApolloClient, InMemoryCache, ApolloProvider, split, HttpLink } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { createUploadLink } from 'apollo-upload-client'
 import './index.css'
 import App from './App.jsx'
-
-// Create an upload link for file uploads
-const uploadLink = createUploadLink({
-  uri: 'https://sync-jqrt.onrender.com/graphql',
-  headers: {
-    'Apollo-Require-Preflight': 'true'
-  }
-})
 
 // Create a WebSocket link
 const wsLink = new GraphQLWsLink(createClient({
@@ -34,6 +25,11 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+// Create an HTTP link
+const httpLink = new HttpLink({
+  uri: 'https://sync-jqrt.onrender.com/graphql'
+});
+
 // Split links based on operation type
 const splitLink = split(
   ({ query }) => {
@@ -44,7 +40,7 @@ const splitLink = split(
     )
   },
   wsLink,
-  authLink.concat(uploadLink)
+  authLink.concat(httpLink)
 )
 
 // Create Apollo Client instance
